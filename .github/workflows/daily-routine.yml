@@ -1,0 +1,21 @@
+name: Mess Bajar Daily Automation
+
+on:
+  schedule:
+    - cron: '0 2 * * *' # প্রতিদিন বাংলাদেশ সময় সকাল ৮:০০ টায় চলবে (UTC 2:00)
+  workflow_dispatch: # চাইলে আপনি গিটহাব থেকে ম্যানুয়ালিও রান করে টেস্ট করতে পারবেন
+
+jobs:
+  send-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Run automation script
+        run: node check-routine.js
