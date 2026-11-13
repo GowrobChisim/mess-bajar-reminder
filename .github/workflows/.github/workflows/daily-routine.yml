@@ -2,7 +2,7 @@ name: Mess Bajar Daily Automation
 
 on:
   schedule:
-    - cron: '0 2 * * *' # প্রতিদিন বাংলাদেশ সময় সকাল ৮:০০ টায় চলবে
+    - cron: '0 2 * * *'
   workflow_dispatch:
 
 jobs:
