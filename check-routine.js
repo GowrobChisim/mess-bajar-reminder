@@ -37,7 +37,7 @@ function sendNotification(memberId, dayName, weekName) {
     topic: topic,
     title: `🛒 আজকের মেস বাজার (${weekName})`,
     message: `হ্যালো ${memberId}! আজ ${dayName}, আপনার মেসের বাজার করার পালা। দ্রুত বাজার করে ফেলুন।`,
-    priority: "urgent",
+    priority: 5,
     tags: ["shopping_cart", "bell"]
   });
 
