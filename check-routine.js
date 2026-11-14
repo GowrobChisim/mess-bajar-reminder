@@ -1,22 +1,40 @@
 const https = require('https');
 
-// আপনার রুটিন ডাটা
-const weeklySchedule = {
-  6: ["Gowrob", "Irak"],          // শনিবার
-  0: ["Biplob", "Yasin"],         // রবিবার
-  1: ["Fahad", "Mahid"],          // সোমবার
-  2: ["Rakib", "Rashed", "Ahad"], // মঙ্গলবার
-  3: ["Palash", "Sonjoy", "Mahbub"], // বুধবার
-  4: ["Harun", "Rafsan", "Yasin", "Irak"], // বৃহস্পতিবার
-  5: ["Nasir", "Nafis", "Mahid", "Ahad"]   // শুক্রবার
+//  (Week 1)
+const week1Schedule = {
+  6: ["Biplob", "Mahid"],       // sat
+  0: ["Gowrob", "Yasin"],       // sun
+  1: ["Fahad", "Babu"],         // mon
+  2: ["Rashedul", "Ahad"],      // tue
+  3: ["Rakib", "Mahbub"],       // wed
+  4: ["Sonjoy", "Irak", "Mahbub"], // th
+  5: ["Palash", "Ahad"]         // fr
 };
 
-function sendNotification(memberId, dayName) {
+// (Week 2)
+const week2Schedule = {
+  6: ["Biplob", "Mahid"],       
+  0: ["Gowrob", "Yasin"],       
+  1: ["Fahad", "Babu"],         
+  2: ["Rafsan", "Mahid"],       
+  3: ["Harun", "Mahbub"],       
+  4: ["Nafis", "Mahid"],        
+  5: ["Nasir", "Yasin"]         
+};
+
+// কোন সপ্তাহ চলছে তা বের করার ফাংশন
+function getWeekNumber(date) {
+  const start = new Date(date.getFullYear(), 0, 1);
+  const days = Math.floor((date - start) / (24 * 60 * 60 * 1000));
+  return Math.ceil((days + start.getDay() + 1) / 7);
+}
+
+function sendNotification(memberId, dayName, weekName) {
   const topic = `sherpur_mess_${memberId}`;
   const data = JSON.stringify({
     topic: topic,
-    title: "🛒 আজকের মেস বাজার রিমাইন্ডার",
-    message: `হ্যালো! আজ (${dayName}) আপনার মেসের বাজার করার পালা। দ্রুত বাজার করে ফেলুন।`,
+    title: `🛒 আজকের মেস বাজার (${weekName})`,
+    message: `হ্যালো ${memberId}! আজ ${dayName}, আপনার মেসের বাজার করার পালা। দ্রুত বাজার করে ফেলুন।`,
     priority: "high",
     tags: ["shopping_cart", "bell"]
   });
@@ -44,16 +62,23 @@ function sendNotification(memberId, dayName) {
   req.end();
 }
 
-// আজকের দিন চেক করা
+// আজকের দিন এবং সপ্তাহ চেক করা
 const today = new Date();
+const currentWeekNumber = getWeekNumber(today);
+const isFirstWeek = currentWeekNumber % 2 !== 0; 
+
 const dayIndex = today.getDay(); 
 const dayNames = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
 const todayName = dayNames[dayIndex];
+const weekName = isFirstWeek ? "১ম সপ্তাহ" : "২য় সপ্তাহ";
 
-const todayMembers = weeklySchedule[dayIndex] || [];
-console.log(`আজ ${todayName}, বাজারের দায়িত্বে আছেন:`, todayMembers);
+const todayMembers = isFirstWeek ? week1Schedule[dayIndex] : week2Schedule[dayIndex];
+
+console.log(`আজ ${todayName} (${weekName}), বাজারের দায়িত্বে আছেন:`, todayMembers);
 
 // আজকের বাজারকারীদের নোটিফিকেশন পাঠানো
-todayMembers.forEach(id => {
-  sendNotification(id, todayName);
-});
+if (todayMembers) {
+  todayMembers.forEach(id => {
+    if(id) sendNotification(id, todayName, weekName);
+  });
+}
