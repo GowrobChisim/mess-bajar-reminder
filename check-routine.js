@@ -29,11 +29,13 @@ function getWeekNumber(date) {
   return Math.ceil((days + start.getDay() + 1) / 7);
 }
 
-function sendNotification(memberId, dayName) {
-  const topic = `Jony_Mess_${memberId}`;
+function sendNotification(memberId, dayName, weekName) {
+  // আপনার টপিকের নাম (আপনি jony_mess দিলে সেটাই রাখবেন)
+  const topic = `Jony_Mess_${memberId}`; 
+  
   const data = JSON.stringify({
-    
-    title: `🛒 আজকের মেস বাজার `,
+    topic: topic,
+    title: `🛒 আজকের মেস বাজার (${weekName})`,
     message: `হ্যালো ${memberId}! আজ ${dayName}, আপনার মেসের বাজার করার পালা। দ্রুত বাজার করে ফেলুন।`,
     priority: "urgent",
     tags: ["shopping_cart", "bell"]
@@ -42,7 +44,7 @@ function sendNotification(memberId, dayName) {
   const options = {
     hostname: 'ntfy.sh',
     port: 443,
-    path: `/${topic}`,
+    path: `/`, // <--- ঠিক এই জায়গাটি পরিবর্তন করা হয়েছে (আগে `/${topic}` ছিল)
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
