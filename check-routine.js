@@ -30,12 +30,12 @@ function getWeekNumber(date) {
 }
 
 function sendNotification(memberId, dayName, weekName) {
-  const topic = `sherpur_mess_${memberId}`;
+  const topic = `jony_mess_${memberId}`;
   const data = JSON.stringify({
     topic: topic,
     title: `🛒 আজকের মেস বাজার (${weekName})`,
     message: `হ্যালো ${memberId}! আজ ${dayName}, আপনার মেসের বাজার করার পালা। দ্রুত বাজার করে ফেলুন।`,
-    priority: "high",
+    priority: "urgent",
     tags: ["shopping_cart", "bell"]
   });
 
