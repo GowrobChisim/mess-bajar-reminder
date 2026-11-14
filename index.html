@@ -138,7 +138,7 @@
 
     // একক মেম্বারকে নোটিফিকেশন পাঠানোর ফাংশন
     window.sendAlertToMember = async (memberId, bnName) => {
-      const topic = `sherpur_mess_${memberId}`;
+      const topic = `jony_mess${memberId}`;
       status.innerText = `⏳ ${bnName}-এর ফোনে নোটিফিকেশন পাঠানো হচ্ছে...`;
       try {
         await fetch(`https://ntfy.sh/${topic}`, {
@@ -163,7 +163,7 @@
         for (const id of memberIds) {
           const member = membersData.find(m => m.id === id);
           if (member) {
-            await fetch(`https://ntfy.sh/sherpur_mess_${member.id}`, {
+            await fetch(`https://ntfy.sh/jony_mess${member.id}`, {
               method: 'POST',
               body: `হ্যালো ${member.bnName}, আজ (${dayBn}) আপনার মেসের বাজার করার পালা! 🛒`,
               headers: {
@@ -228,7 +228,7 @@
         div.innerHTML = `
           <div>
             <p class="font-bold text-sm ${isToday ? 'text-green-400' : 'text-white'}">${m.bnName}</p>
-            <p class="text-xs text-gray-400">বার: ${m.days.join(', ')} | কোড: <span class="text-gray-300 font-mono">sherpur_mess_${m.id}</span></p>
+            <p class="text-xs text-gray-400">বার: ${m.days.join(', ')} | কোড: <span class="text-gray-300 font-mono">jony_mess${m.id}</span></p>
           </div>
           <button onclick="sendAlertToMember('${m.id}', '${m.bnName}')" class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold px-3 py-1.5 rounded transition shrink-0">
             🔔 Notify
@@ -302,7 +302,7 @@
         subTitle.innerText = "মেস বাজার ড্যাশবোর্ড";
         document.getElementById('userNameDisplay').innerText = `${memberObj.bnName} (${memberObj.days.join(', ')})`;
         document.getElementById('userEmailDisplay').innerText = user.email;
-        document.getElementById('topicCode').innerText = `sherpur_mess_${memberObj.id}`;
+        document.getElementById('topicCode').innerText = `jony_mess${memberObj.id}`;
         renderDashboardList();
       } else {
         authSection.classList.remove('hidden');
