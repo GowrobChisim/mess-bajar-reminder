@@ -4,7 +4,7 @@ const https = require('https');
 const week1Schedule = {
   6: ["Biplob", "Mahid"],       // sat
   0: ["Gowrob", "Yasin"],       // sun
-  1: ["Fahad", "Babu"],         // mon
+  1: ["Fahad", "Irak"],         // mon
   2: ["Rashedul", "Ahad"],      // tue
   3: ["Rakib", "Mahbub"],       // wed
   4: ["Sonjoy", "Irak", "Mahbub"], // th
@@ -15,7 +15,7 @@ const week1Schedule = {
 const week2Schedule = {
   6: ["Biplob", "Mahid"],       
   0: ["Gowrob", "Yasin"],       
-  1: ["Fahad", "Babu"],         
+  1: ["Fahad", "Irak"],         
   2: ["Rafsan", "Mahid"],       
   3: ["Harun", "Mahbub"],       
   4: ["Nafis", "Mahid"],        
@@ -30,7 +30,7 @@ function getWeekNumber(date) {
 }
 
 function sendNotification(memberId, dayName, weekName) {
-  // আপনার টপিকের নাম (আপনি jony_mess দিলে সেটাই রাখবেন)
+  
   const topic = `Jony_Mess_${memberId}`; 
   
   const data = JSON.stringify({
