@@ -1,36 +1,44 @@
 const https = require('https');
 
-//  (Week 1)
+// ১ম সপ্তাহের রুটিন (Week 1)
 const week1Schedule = {
-  6: ["Biplob", "Mahid"],       // sat
-  0: ["Gowrob", "Yasin"],       // sun
-  1: ["Fahad", "Irak"],         // mon
-  2: ["Rashedul", "Ahad"],      // tue
-  3: ["Rakib", "Mahbub"],       // wed
-  4: ["Sonjoy", "Irak", "Mahbub"], // th
-  5: ["Palash", "Ahad"]         // fr
+  6: ["Biplob", "Mahid"],       // শনিবার
+  0: ["Gowrob", "Yasin"],       // রবিবার
+  1: ["Fahad", "Irak"],         // সোমবার
+  2: ["Rashedul", "Ahad"],      // মঙ্গলবার
+  3: ["Rakib", "Mahbub"],       // বুধবার
+  4: ["Sonjoy", "Irak", "Mahbub"], // বৃহস্পতিবার
+  5: ["Palash", "Ahad"]         // শুক্রবার
 };
 
-// (Week 2)
+// ২য় সপ্তাহের রুটিন (Week 2)
 const week2Schedule = {
-  6: ["Biplob", "Mahid"],       
-  0: ["Gowrob", "Yasin"],       
-  1: ["Fahad", "Irak"],         
-  2: ["Rafsan", "Mahid"],       
-  3: ["Harun", "Mahbub"],       
-  4: ["Nafis", "Mahid"],        
-  5: ["Nasir", "Yasin"]         
+  6: ["Biplob", "Mahid"],       // শনিবার
+  0: ["Gowrob", "Yasin"],       // রবিবার
+  1: ["Fahad", "Irak"],         // সোমবার
+  2: ["Rafsan", "Mahid"],       // মঙ্গলবার
+  3: ["Harun", "Mahbub"],       // বুধবার
+  4: ["Nafis", "Mahid"],        // বৃহস্পতিবার
+  5: ["Nasir", "Yasin"]         // শুক্রবার
 };
 
-// কোন সপ্তাহ চলছে তা বের করার ফাংশন
-function getWeekNumber(date) {
-  const start = new Date(date.getFullYear(), 0, 1);
-  const days = Math.floor((date - start) / (24 * 60 * 60 * 1000));
-  return Math.ceil((days + start.getDay() + 1) / 7);
+// একটি নির্দিষ্ট তারিখ থেকে ১ম বা ২য় সপ্তাহ বের করার ফাংশন
+function getIsFirstWeek(currentDate) {
+  // ১৪ নভেম্বর ২০২৬ (শনিবার) কে ১ম সপ্তাহের শুরুর দিন হিসেবে ফিক্স করা হলো (এখানে মাস 0 থেকে শুরু হয়, তাই 10 = নভেম্বর)
+  const anchorDate = Date.UTC(2026, 10, 14); 
+  const current = Date.UTC(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+  
+  // ওই নির্দিষ্ট তারিখ থেকে আজ পর্যন্ত কত দিন পার হয়েছে
+  const diffInDays = Math.floor((current - anchorDate) / (1000 * 60 * 60 * 24));
+  
+  // কত সপ্তাহ পার হয়েছে
+  const weeksPassed = Math.floor(diffInDays / 7);
+  
+  // জোড় সপ্তাহ (0, 2, 4...) হলে ১ম সপ্তাহ, বিজোড় (1, 3, 5...) হলে ২য় সপ্তাহ
+  return (weeksPassed % 2 === 0);
 }
 
 function sendNotification(memberId, dayName, weekName) {
-  
   const topic = `Jony_Mess_${memberId}`; 
   
   const data = JSON.stringify({
@@ -44,7 +52,7 @@ function sendNotification(memberId, dayName, weekName) {
   const options = {
     hostname: 'ntfy.sh',
     port: 443,
-    path: `/`, // <--- ঠিক এই জায়গাটি পরিবর্তন করা হয়েছে (আগে `/${topic}` ছিল)
+    path: `/`,
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -66,13 +74,12 @@ function sendNotification(memberId, dayName, weekName) {
 
 // আজকের দিন এবং সপ্তাহ চেক করা
 const today = new Date();
-const currentWeekNumber = getWeekNumber(today);
-const isFirstWeek = currentWeekNumber % 2 !== 0; 
+const isFirstWeek = getIsFirstWeek(today); 
 
 const dayIndex = today.getDay(); 
 const dayNames = ["রবিবার", "সোমবার", "মঙ্গলবার", "বুধবার", "বৃহস্পতিবার", "শুক্রবার", "শনিবার"];
 const todayName = dayNames[dayIndex];
-const weekName = isFirstWeek ? "১ম সপ্তাহ" : "২য় সপ্তাহ";
+const weekName = isFirstWeek ? "১ম সপ্তাহ" : "২য় সপ্তাহ";
 
 const todayMembers = isFirstWeek ? week1Schedule[dayIndex] : week2Schedule[dayIndex];
 
